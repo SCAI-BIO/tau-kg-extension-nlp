@@ -7,19 +7,18 @@ import pandas as pd
 server = "https://graphstore.scai.fraunhofer.de"
 password = 'guest'
 user = 'guest'
-db_name = "depression_mesh"
+db_name = "kairntech"
 
 # %%
 # Connect to database
 connect(user, password, server, db_name)
 
 #%% Set condition statement based on  which run set we query
-run_num = input("Please select the run number \n")
-print("extracting triples from run {}".format(run_num))
-condition = "WHERE annotation.ResultSet = '{}'".format(run_num)
+
+condition = "WHERE annotation.DataSource IS NULL"
 # %%
 #Unique statement per pmid
-bel_triple_pmid_query = "select out.bel as subject, @class as relation, in.bel as object, pmid, evidence from bel_relation {}".format(condition)
+bel_triple_pmid_query = "select out.bel as subject, @class as relation, in.bel as object, pmid, evidence from bel_relation"#.format(condition)
 results = query.sql(bel_triple_pmid_query).data
 print(results)
 
