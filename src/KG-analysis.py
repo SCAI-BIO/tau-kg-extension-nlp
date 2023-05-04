@@ -18,7 +18,8 @@ connect(user, password, server, db_name)
 condition = "WHERE annotation.DataSource IS NULL"
 # %%
 #Unique statement per pmid
-bel_triple_pmid_query = "select out.bel as subject, @class as relation, in.bel as object, pmid, evidence from bel_relation"#.format(condition)
+bel_triple_pmid_query = "select out.bel as subject, @class as relation, in.bel as object, pmid, evidence from bel_relation {}".format(condition)
+bel_triple_pmid_query = "SELECT out.bel, as subject, @class as relation, in.bel as object FROM bel_relation WHERE annotation.DataSource IS NULL"
 results = query.sql(bel_triple_pmid_query).data
 print(results)
 
@@ -65,7 +66,7 @@ print("Number of Edges", num_edges[0]["count(*)"])
 # and find the difference. To get nodes for a set of triples,
 # you can run:
 # select expand(bothV()) FROM bel_relation WHERE annotation.ResultSet = "1"
-results = "select expand(bothV()) FROM bel_relation {}".format(condition)
+results = "select expand(bothV()) FROM bel_relation"# {}".format(condition)
 num_nodes = query.sql(results).data
 print("Number of Nodes", len(num_nodes))
 
