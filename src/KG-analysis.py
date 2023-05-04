@@ -7,29 +7,33 @@ import pandas as pd
 server = "https://graphstore.scai.fraunhofer.de"
 password = 'guest'
 user = 'guest'
-db_name = "kairntech"
+db_name = "pharmacome"
 
 # %%
 # Connect to database
 connect(user, password, server, db_name)
 
-#%% Set condition statement based on  which run set we query
+#%% Set condition statement based on  which run set. Comment each one based on the purpose
 
 condition = "WHERE annotation.DataSource IS NULL"
+#condition = "SELECT * FROM bel_relation WHERE annotation.DataSource = 'Kairntech'"
 # %%
 #Unique statement per pmid
-bel_triple_pmid_query = "select out.bel as subject, @class as relation, in.bel as object, pmid, evidence from bel_relation {}".format(condition)
-bel_triple_pmid_query = "SELECT out.bel, as subject, @class as relation, in.bel as object FROM bel_relation WHERE annotation.DataSource IS NULL"
+bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object FROM bel_relation {}".format(condition)
+#bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object FROM bel_relation WHERE annotation.DataSource IS NULL"
 results = query.sql(bel_triple_pmid_query).data
-print(results)
+print((results))
 
 #%%
 #Save all triples in excel
-
 triples = pd.DataFrame(data = results)
 print(triples)
 triples.to_excel('triples.xlsx')
-
+#%% temporal check
+import pandas as pd
+df = pd.read_excel('NLP_training_triples_from_bms.xlsx')
+print(df)
+results = df
 #%%
 unique_triples = dict()
 unique_statements = set()
@@ -145,10 +149,5 @@ plt.bar(relationships, counts)
 plt.show()
 
 
-# %% get triples and their quality
-bel_query = "select from bel_relation where annotation.Quality is not null"
-results = query.sql(bel_query).data
-print(results)
-# %% get each triple from each run
 
 
