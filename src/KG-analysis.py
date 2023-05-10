@@ -67,12 +67,9 @@ counts = []
 for item in results:
     namespaces.append(item["namespace"])
     counts.append(item["number"])
-
-
 namespaces = namespaces[:10]
 counts = counts [:10]
 import matplotlib.pyplot as plt
-
 plt.ylabel('Namespaces')
 plt.title('Count of top ten namespaces')
 plt.xticks(rotation=30)
@@ -81,24 +78,19 @@ plt.bar(namespaces, counts)
 plt.savefig('barplotinference.png', dpi=300, bbox_inches = "tight")
 plt.show()
 
-
 # %%
 # Number of node occurences
-
 bel_query = "SELECT value as node_bel, count(*) as number FROM (select expand(unionAll(out.bel, in.bel)) from bel_relation) GROUP BY value ORDER BY number DESC"
 results = query.sql(bel_query).data
 print(results)
-
 node_bels = []
 counts = []
 for item in results:
     node_bels.append(item["node_bel"])
     counts.append(item["number"])
-
 node_bels = node_bels[:10]
 counts = counts [:10]
 import matplotlib.pyplot as plt
-
 plt.xlabel('BEL nodes')
 plt.title('Count of top ten node occurences')
 plt.xticks(rotation=90)
@@ -109,7 +101,6 @@ plt.show()
 
 
 # %% different types of relationships
-
 bel_query = "SELECT @class as edge_type, count(*) as number FROM bel_relation {}".format(condition)+ "GROUP BY @class ORDER BY number DESC"
 results = query.sql(bel_query).data
 print(results)
@@ -118,10 +109,8 @@ counts = []
 for item in results:
     relationships.append(item["edge_type"])
     counts.append(item["number"])
-
 relationships = relationships[:10]
 counts = counts [:10]
-
 plt.xlabel('BEL relationship types')
 plt.title('Count of top ten BEL relationships')
 plt.xticks(rotation=90)
