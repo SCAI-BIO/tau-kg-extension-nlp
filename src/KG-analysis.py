@@ -13,11 +13,11 @@ db_name = "kairntech"
 # Connect to database
 connect(user, password, server, db_name)
 
-#%% Set condition statement based on  which run set. Comment each one based on the purpose
-#condition = "WHERE annotation.DataSource IS NULL"
+#%% Set condition statement
 condition = "SELECT * FROM bel_relation WHERE annotation.DataSource = 'Kairntech'"
+
 # %%
-#all statements
+#Extract all BEL statements
 bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object, pmid FROM bel_relation {}".format(condition)
 #bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object FROM bel_relation WHERE annotation.DataSource IS NULL"
 results = query.sql(bel_triple_pmid_query).data
@@ -28,12 +28,9 @@ print(len(results))
 triples = pd.DataFrame(data = results)
 print(triples)
 triples.to_excel('triples.xlsx')
-#%% temporal check
-import pandas as pd
-df = pd.read_excel('Data\\nlp_training_triples.xlsx')
-print(df)
-results = df
+
 #%%
+#Get unique BEL triples
 unique_triples = dict()
 unique_statements = set()
 for row in results:
@@ -41,45 +38,30 @@ for row in results:
     triple = (row["subject"], row["relation"], row["object"])
     pmid = row["pmid"]
     unique_statements.add(triple)
-
     if pmid in unique_triples:
         unique_triples[pmid].add(triple)
-
     else:
         unique_triples[pmid] = {triple}
-
 all_ids = []
 for key, value in unique_triples.items():
     all_ids.append(key)
-
 print("Total number of unique statements", len(unique_statements))
 print("Total number of unique pmids", len(all_ids))
 
 # %%
-#Number of  edges
+#Number of  edges and nodes
 results = "SELECT count(*) FROM bel_relation {}".format(condition)
 num_edges = query.sql(results).data
 print("Number of Edges", num_edges[0]["count(*)"])
-
-#%% Number of nodes
-# Notice: the resultset numbers are embedded in the edges right,
-# nodes are shard by the triple edges.
-# To find new nodes is a bit tricky,
-# I would first get all nodes for triples from result set 1,
-# and then all nodes from triples from result set 2,
-# and find the difference. To get nodes for a set of triples,
-# you can run:
-# select expand(bothV()) FROM bel_relation WHERE annotation.ResultSet = "1"
-results = "select expand(bothV()) FROM bel_relation"# {}".format(condition)
+results = "SELECT count(*) FROM bel"
 num_nodes = query.sql(results).data
-print("Number of Nodes", len(num_nodes))
+print("Number of Nodes", num_nodes[0]["count(*)"])
 
 # %%
 # Number o namespace occurences
 bel_query = "SELECT value as namespace, count(*) as number FROM (select expand(unionAll(out.namespace, in.namespace)) from bel_relation {})".format(condition) + "GROUP BY value ORDER BY number DESC"
 results = query.sql(bel_query).data
 print(results)
-
 namespaces = []
 counts = []
 for item in results:
