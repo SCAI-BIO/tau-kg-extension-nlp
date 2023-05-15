@@ -13,6 +13,7 @@ db_name = "kairntech"
 # Connect to database
 connect(user, password, server, db_name)
 
+
 #%% Set condition statement
 condition = "SELECT * FROM bel_relation WHERE annotation.DataSource = 'Kairntech'"
 
