@@ -14,5 +14,7 @@ The different dataset and KG used in this study is are located in data directory
 The code directory contains the following scripts:
 
 -)The script  for the extraction of PubMed ids of the extension corpus
+
 -)The script for analyzing the NLP-based KG.
+
 -)The script for analyzing the training dataset 
