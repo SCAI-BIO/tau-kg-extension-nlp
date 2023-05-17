@@ -2,7 +2,7 @@
 This repository provides the code for our research regarding the extension of the Tau subgraph within the pharmacome using NLP.
 
 ## Relevant data
-The different dataset and KG used in this study is are located in data directory. These files include:
+The different dataset and KG used in this study are located in data directory. These files include:
 
 -) The triples from the original Tau subgraph of Human Brain Pharmacome (HBP), which focuses on the context of pTau
 
