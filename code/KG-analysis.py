@@ -7,7 +7,7 @@ import pandas as pd
 server = "https://graphstore.scai.fraunhofer.de"
 password = 'guest'
 user = 'guest'
-db_name = "kairntech"
+db_name = "pharmacome"
 
 # %%
 # Connect to database
@@ -18,10 +18,11 @@ condition = "SELECT * FROM bel_relation WHERE annotation.DataSource = 'Kairntech
 
 # %%
 #Extract all BEL statements
-bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object, pmid FROM bel_relation {}".format(condition)
+#bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object, pmid FROM bel_relation {}".format(condition)
 #bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object FROM bel_relation WHERE annotation.DataSource IS NULL"
+bel_triple_pmid_query = 'select pmid from bel_relation where tau = true and annotation.DataSource == "Kairntech"'
 results = query.sql(bel_triple_pmid_query).data
-print(len(results))
+print((results))
 
 #%%
 #Save all triples in excel
