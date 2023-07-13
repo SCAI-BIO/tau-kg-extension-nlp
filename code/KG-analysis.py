@@ -20,10 +20,18 @@ condition = "SELECT * FROM bel_relation WHERE annotation.DataSource = 'Kairntech
 #Extract all BEL statements
 #bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object, pmid FROM bel_relation {}".format(condition)
 #bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object FROM bel_relation WHERE annotation.DataSource IS NULL"
-bel_triple_pmid_query = 'select pmid from bel_relation where tau = true and annotation.DataSource == "Kairntech"'
+bel_triple_pmid_query = 'select pmid from bel_relation where tau = true and annotation.DataSource != "Kairntech"'
 results = query.sql(bel_triple_pmid_query).data
 print((results))
+#%%
+for row in results:
+    print(row["pmid"])
 
+file = open("test_original_tah_KG.txt","w")
+for row in results:
+    file.write(str(row["pmid"]))
+    file.write("\n")
+file.close()
 #%%
 #Save all triples in excel
 triples = pd.DataFrame(data = results)
