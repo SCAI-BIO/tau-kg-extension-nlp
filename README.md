@@ -1,5 +1,5 @@
 # A Natural Language Processing System for the Efficient Updating of Highly Curated Pathophysiology Mechanism Knowledge Graphs 
-This repository provides the code for our research regarding the extension of the Tau subgraph within the pharmacome using NLP.
+This repository provides the code for our research regarding the extension of the Tau subgraph within the pharmacome using NLP (doi: https://doi.org/10.1016/j.ailsci.2023.100078 )
 
 ## Relevant data
 The different dataset and KG used in this study are located in data directory. These files include:
