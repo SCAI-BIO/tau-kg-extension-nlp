@@ -7,7 +7,7 @@ import pandas as pd
 server = "https://graphstore.scai.fraunhofer.de"
 password = 'guest'
 user = 'guest'
-db_name = "pharmacome"
+db_name = "kairntech"
 
 # %%
 # Connect to database
@@ -19,10 +19,12 @@ condition = "SELECT * FROM bel_relation WHERE annotation.DataSource = 'Kairntech
 # %%
 #Extract all BEL statements
 #bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object, pmid FROM bel_relation {}".format(condition)
-#bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object FROM bel_relation WHERE annotation.DataSource IS NULL"
-bel_triple_pmid_query = 'select pmid from bel_relation where tau = true and annotation.DataSource != "Kairntech"'
+bel_triple_pmid_query = "SELECT out.bel as subject, @class as relation, in.bel as object, pmid, evidence FROM bel_relation WHERE annotation.DataSource IS NULL"
+#bel_triple_pmid_query = 'select pmid from bel_relation where tau = true and annotation.DataSource != "Kairntech"'
+#bel_triple_pmid_query = 'select  from bel_relation where document.file.path[0] like "%/tau/%"'
+
 results = query.sql(bel_triple_pmid_query).data
-print((results))
+print(len(results))
 #%%
 for row in results:
     print(row["pmid"])
@@ -36,7 +38,7 @@ file.close()
 #Save all triples in excel
 triples = pd.DataFrame(data = results)
 print(triples)
-triples.to_excel('triples.xlsx')
+triples.to_excel('initial-tau-triples-compelte-data.xlsx')
 
 #%%
 #Get unique BEL triples
